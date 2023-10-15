@@ -1,4 +1,5 @@
 import scapy.all as scapy
+from scapy.layers import http
 
 
 def sniff(interface):
@@ -6,7 +7,9 @@ def sniff(interface):
 
 
 def process_sniffed_packet(packet):
-    print(packet)
+    if packet.haslayer(http.HTTPRequest):                                                                               # ellenőrzi, hogy a pcket rendelkezik e layerrel, és az HTTP request e.
+        if packet.haslayer(scapy.Raw):
+            print(packet[scapy.Raw].load)                                                                               # [] közé tesszük a layer-t, amit keresünk, a '.load' a field a layeren belül, ami érdekel minket
 
 
 sniff("eth0")
